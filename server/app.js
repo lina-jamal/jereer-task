@@ -1,4 +1,6 @@
-require("dotenv").config();
+// require("dotenv").config();
+require("env2")("./config.env");
+
 const express = require("express");
 const { join } = require("path");
 const compression = require("compression");
