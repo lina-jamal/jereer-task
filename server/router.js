@@ -7,6 +7,9 @@ const errorHandler = require("./middlewares/errorHandler");
 router.post("/signup", userCtrl.signup);
 router.post("/login", userCtrl.login);
 router.use(Auth);
+router.get("/auth", (req, res) => {
+  res.json(req.user);
+});
 router.patch("/user", userCtrl.updateUserData);
 router.get("/logout", userCtrl.logout);
 router.use(errorHandler.clientError);
