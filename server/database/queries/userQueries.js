@@ -15,5 +15,12 @@ const userQueries = {
     };
     return connection.query(sql);
   },
+  updateUser: ({ userId, name, phone }) => {
+    const sql = {
+      text: "UPDATE users SET name = $1, phone = $2 WHERE id = $3;",
+      values: [name, phone, userId],
+    };
+    return connection.query(sql);
+  },
 };
 module.exports = userQueries;

@@ -51,5 +51,32 @@ const userCtrl = {
       next(err);
     }
   },
+  updateUserData: async (req, res, next) => {
+    try {
+      const { name, phone } = req.body;
+      const { id: userId } = req.user;
+      console.log(name, phone);
+      await userQueries.updateUser({
+        userId,
+        name,
+        phone,
+      });
+      return res.json({
+        statusCode: 200,
+        message: "user updated Successfully",
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+  logout: (req, res, next) => {
+    try {
+      return res
+        .clearCookie("token")
+        .json({ statusCode: 200, message: "Logout successfully" });
+    } catch (error) {
+      return next(error);
+    }
+  },
 };
 module.exports = userCtrl;
