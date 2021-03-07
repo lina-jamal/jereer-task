@@ -51,7 +51,9 @@ const userCtrl = {
       //   name: user.name,
       //   id: user.id,
       // });
-      const userToken = admin.auth().createCustomToken("userId-" + user.id);
+      const userToken = await admin
+        .auth()
+        .createCustomToken("userId-" + user.id);
 
       // res
       //   .cookie("token", token, { httpOnly: true })
