@@ -1,8 +1,15 @@
 const bcrypt = require("bcrypt");
 const Boom = require("@hapi/boom");
-
+const admin = require("firebase-admin");
 const userQueries = require("../database/queries/userQueries");
-const jwtFunction = require("../middlewares/jwt");
+// const jwtFunction = require("../middlewares/jwt");
+admin.initializeApp({
+  credential: admin.credential.cert(
+    JSON.parse(
+      Buffer.from(process.env.FIREBASE_CRED, "base64").toString("ascii")
+    )
+  ),
+});
 
 const userCtrl = {
   signup: async (req, res, next) => {
@@ -39,14 +46,17 @@ const userCtrl = {
       if (!authorized) {
         throw Boom.unauthorized("invalid password");
       }
-      const token = await jwtFunction.signToken({
-        email: user.email,
-        name: user.name,
-        id: user.id,
-      });
+      // const token = await jwtFunction.signToken({
+      //   email: user.email,
+      //   name: user.name,
+      //   id: user.id,
+      // });
+      const userToken = admin.auth().createCustomToken("userId-" + user.id);
 
-      res.cookie("token", token, { httpOnly: true });
-      res.status(200).json({ status: 200, message: "logged in successfully" });
+      // res
+      //   .cookie("token", token, { httpOnly: true })
+      //   .status(200)
+      res.json({ status: 200, userToken, message: "logged in successfully" });
     } catch (err) {
       next(err);
     }
